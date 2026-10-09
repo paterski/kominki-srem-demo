@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 140" width="520" height="140"><defs>
+<linearGradient id="gMain" x1="0.2" y1="0" x2="0.6" y2="1"><stop offset="0" stop-color="#C9361A"></stop><stop offset=".5" stop-color="#E2602A"></stop><stop offset="1" stop-color="#F29A4A"></stop></linearGradient>
+<linearGradient id="gDeep" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4A2A1C"></stop><stop offset=".6" stop-color="#8C2E1C"></stop><stop offset="1" stop-color="#B8401F"></stop></linearGradient>
+<linearGradient id="gMid" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9E3320"></stop><stop offset="1" stop-color="#D9542A"></stop></linearGradient>
+<linearGradient id="gPale" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F7C98B"></stop><stop offset="1" stop-color="#F2A65A"></stop></linearGradient>
+</defs><g transform="translate(16,10) scale(0.92)"><path d="M34 50 C16 62 8 84 14 102 C20 118 36 127 48 127 C42 112 42 98 49 88 C42 78 32 66 34 50 Z" fill="url(#gDeep)"></path>
+<path d="M22 74 C14 88 16 106 28 118 C36 125 44 127 48 127 C40 116 38 104 42 94 C34 90 26 84 22 74 Z" fill="url(#gMid)" opacity=".9"></path>
+<path d="M66 2 C44 24 36 46 46 62 C54 76 64 84 58 104 C56 112 52 120 48 127 C76 122 94 102 92 78 C90 56 70 42 66 2 Z" fill="url(#gMain)"></path>
+<path d="M92 76 C96 104 78 126 50 128 C42 128 34 126 28 122 C56 122 80 106 92 76 Z" fill="url(#gPale)" opacity=".9"></path>
+<path d="M72 58 C64 72 66 88 70 100 C80 90 82 72 72 58 Z" fill="#F7C98B" opacity=".55"></path></g><text x="130" y="96" font-family="'Bricolage Grotesque', sans-serif" font-weight="800" font-size="72" letter-spacing="-3.2" fill="#211D1A">kominki śrem</text></svg>

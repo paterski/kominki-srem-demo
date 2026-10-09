@@ -1,0 +1,28 @@
+/* Kominki Śrem – design tokens (paleta Żar) */
+:root{
+  /* Podstawowe */
+  --wegiel:#211D1A; --popiol:#F3EFEA; --zar:#E2602A;
+  /* Płomień */
+  --dab:#4A2A1C; --cegla:#9E3320; --glownia:#C9361A; --bursztyn:#F29A4A; --miod:#F7C98B;
+  /* Neutralne */
+  --sadza:#171412; --grafit:#3A332E; --kamien:#8A817A; --pyl:#DDD5CC; --biel:#FBFAF8;
+  --gradient-plomien:linear-gradient(90deg,#4A2A1C,#9E3320 20%,#C9361A 40%,#E2602A 60%,#F29A4A 80%,#F7C98B);
+  --font-sans:'Bricolage Grotesque',system-ui,sans-serif;
+  --radius-card:6px; --radius-pill:999px;
+}
+/* Tryb jasny (domyślny) */
+:root,[data-theme="light"]{
+  --bg:#F3EFEA; --bg-2:#E9E3DC; --surface:#FBFAF8; --border:#DDD5CC;
+  --text:#211D1A; --text-2:#5E5650;
+  --btn-bg:#E2602A; --btn-text:#211D1A; --link:#B23A1E;
+}
+/* Tryb ciemny */
+[data-theme="dark"]{
+  --bg:#171412; --bg-2:#2C2622; --surface:#211D1A; --border:#3A332E;
+  --text:#F3EFEA; --text-2:#A39A92;
+  --btn-bg:#E2602A; --btn-text:#211D1A; --link:#F29A4A;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#171412; --bg-2:#2C2622; --surface:#211D1A; --border:#3A332E;
+  --text:#F3EFEA; --text-2:#A39A92; --link:#F29A4A;
+}}
