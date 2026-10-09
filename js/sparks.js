@@ -233,8 +233,30 @@
     raf = requestAnimationFrame(frame);
   }
 
+  /* Phones & tablets: the canvas + glass blur together can make scrolling stutter,
+     so the embers fade out as soon as the visitor starts scrolling and the loop
+     stops completely; they come back only at the very top of the page. */
+  const touch = small || matchMedia('(hover: none), (pointer: coarse)').matches;
+  let parked = false, parkTimer;
+  function park(on) {
+    if (on === parked) return;
+    parked = on;
+    clearTimeout(parkTimer);
+    canvas.style.opacity = on ? '0' : '';
+    if (on) parkTimer = setTimeout(() => { stop(); parts.length = 0; }, 260);
+    else start();
+  }
+  if (touch) {
+    canvas.style.transition = 'opacity 250ms ease-out';
+    window.addEventListener('scroll', () => {
+      const y = window.scrollY;
+      if (!parked && y > 24) park(true);
+      else if (parked && y < 4) park(false);
+    }, { passive: true });
+  }
+
   function start() {
-    if (running || document.hidden) return;
+    if (running || document.hidden || parked) return;
     running = true;
     last = performance.now();
     raf = requestAnimationFrame(frame);
@@ -258,5 +280,6 @@
   document.addEventListener('visibilitychange', () => { if (document.hidden) stop(); else if (fireOn || parts.length) start(); });
 
   fireOn = !(window.KS && window.KS.fireOn === false);
+  if (touch && window.scrollY > 24) park(true); // opened mid-page, e.g. via #kontakt
   start();
 })();
