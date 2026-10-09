@@ -90,6 +90,7 @@
   document.addEventListener('ks:form-sent', (e) => track('Formularz wysłany', { temat: (e.detail && e.detail.topic) || '' }));
   document.addEventListener('ks:form-error', (e) => track('Formularz błąd', { powod: (e.detail && e.detail.reason) || '' }));
   document.addEventListener('ks:calc-used', (e) => track('Kalkulator', e.detail || {}));
+  document.addEventListener('ks:calc-pdf', (e) => track('Kalkulator PDF', e.detail || {}));
 
   // The command palette counts as used when it opens.
   const pal = document.querySelector('.palette');

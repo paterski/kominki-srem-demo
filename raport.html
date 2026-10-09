@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex" />
+  <title>Wstępny dobór kominka — Kominki Śrem</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="tokens.css" />
+  <style>
+    /* Printable A4 report — the calculator result as a branded PDF (via "Save as PDF"). */
+    * { box-sizing: border-box; }
+    html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    body { margin: 0; background: #DDD5CC; color: var(--wegiel); font-family: var(--font-sans); font-size: 9.6pt; line-height: 1.4; }
+    .tabular { font-variant-numeric: tabular-nums; }
+
+    /* Screen toolbar */
+    .bar { position: sticky; top: 0; z-index: 5; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: center; padding: 12px 16px; background: rgba(33, 29, 26, 0.92); color: #F3EFEA; backdrop-filter: blur(12px); }
+    .bar p { margin: 0; font-size: 0.9rem; color: #B3AAA2; flex: 1 1 260px; text-align: center; }
+    .btn { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 20px; border-radius: 999px; border: 0; font: 600 0.95rem/1 var(--font-sans); cursor: pointer; text-decoration: none; }
+    .btn--primary { background: var(--zar); color: var(--wegiel); }
+    .btn--ghost { background: rgba(243, 239, 234, 0.1); color: #F3EFEA; box-shadow: inset 0 0 0 1px rgba(243, 239, 234, 0.2); }
+    .btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+
+    /* The sheet */
+    .sheet { width: 210mm; min-height: 297mm; margin: 24px auto 48px; padding: 12mm 14mm 10mm; background: #FBFAF8; box-shadow: 0 30px 80px -30px rgba(33, 29, 26, 0.5); position: relative; display: flex; flex-direction: column; gap: 4.6mm; }
+    @media screen and (max-width: 230mm) { .sheet { width: auto; min-height: 0; margin: 12px; padding: 22px 18px; } }
+
+    .head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; }
+    .logo { display: flex; align-items: center; gap: 3mm; }
+    .logo svg { width: 9.5mm; height: 12.4mm; }
+    .logo b { font-size: 17pt; font-weight: 800; letter-spacing: -0.045em; line-height: 0.92; }
+    .head__meta { text-align: right; }
+    .label { font-size: 7.5pt; font-weight: 600; letter-spacing: 0.24em; text-transform: uppercase; color: #5E5650; margin: 0; }
+    .head__meta h1 { margin: 1.2mm 0 0.8mm; font-size: 15pt; font-weight: 800; letter-spacing: -0.03em; line-height: 1.05; }
+    .head__meta p { margin: 0; color: #5E5650; font-size: 9pt; }
+    .flame { height: 2.4mm; border-radius: 2mm; background: var(--gradient-plomien); }
+
+    h2 { margin: 0 0 2.4mm; font-size: 11.5pt; font-weight: 800; letter-spacing: -0.02em; }
+    .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 5mm; }
+    @media screen and (max-width: 230mm) { .grid2 { grid-template-columns: 1fr; } }
+    .card { border: 1px solid #DDD5CC; border-radius: 4mm; padding: 4mm 4.5mm; background: #fff; }
+    .card--dark { background: var(--wegiel); color: #F3EFEA; border-color: var(--wegiel); }
+    .card--dark .label { color: #A39A92; }
+
+    dl { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 1.6mm 6mm; }
+    dt { color: #5E5650; }
+    dd { margin: 0; font-weight: 600; text-align: right; }
+
+    .kw { display: flex; align-items: baseline; gap: 2mm; margin: 2mm 0 1mm; line-height: 0.9; }
+    .kw__num { font-size: 34pt; font-weight: 800; letter-spacing: -0.05em; color: var(--bursztyn); }
+    .kw__unit { font-size: 15pt; font-weight: 800; color: #A39A92; }
+    .range { margin: 0; color: #D9D1C9; }
+    .scale { position: relative; height: 9mm; margin-top: 4mm; }
+    .scale::before { content: ""; position: absolute; left: 0; right: 0; top: 1.4mm; height: 1.8mm; border-radius: 2mm; background: rgba(243, 239, 234, 0.14); }
+    .scale__band { position: absolute; top: 1.4mm; height: 1.8mm; border-radius: 2mm; background: var(--gradient-plomien); }
+    .scale__mark { position: absolute; top: 0; width: 4.6mm; height: 4.6mm; margin-left: -2.3mm; border-radius: 50%; background: #FBFAF8; box-shadow: 0 0 0 1mm rgba(226, 96, 42, 0.45); }
+    .scale__ticks { position: absolute; left: 0; right: 0; top: 5mm; display: flex; justify-content: space-between; font-size: 7pt; color: #A39A92; }
+    .tip { margin: 2.4mm 0 0; padding: 2.4mm 3mm; border-radius: 2.5mm; background: rgba(243, 239, 234, 0.08); color: #E9E3DC; font-size: 8.8pt; }
+
+    .save { display: flex; align-items: baseline; gap: 2mm; margin: 1mm 0; }
+    .save__num { font-size: 26pt; font-weight: 800; letter-spacing: -0.045em; color: var(--glownia); line-height: 1; }
+    .save__unit { font-size: 13pt; font-weight: 800; color: #5E5650; }
+    .muted { color: #5E5650; margin: 0; }
+    .bars { list-style: none; margin: 1mm 0 0; padding: 0; display: grid; gap: 2.2mm; align-content: start; }
+    .bars li { display: grid; grid-template-columns: 1fr auto; gap: 0.8mm 4mm; font-size: 8.8pt; }
+    .bars b { font-weight: 800; }
+    .track { grid-column: 1 / -1; height: 2.6mm; border-radius: 2mm; background: #F3EFEA; overflow: hidden; }
+    .fill { display: block; height: 100%; border-radius: inherit; background: #A39A92; }
+    .bars li.wood .fill { background: var(--gradient-plomien); }
+    .bars li.wood b, .bars li.wood span:first-child { color: var(--link); }
+    .bars li.cur .fill { background: repeating-linear-gradient(-45deg, #8A817A 0 1.4mm, #C9C1B8 1.4mm 2.4mm); }
+    .facts { margin: 2.6mm 0 0; padding: 0; list-style: none; display: grid; gap: 1.2mm; font-size: 8.3pt; color: #5E5650; }
+
+    .next { display: grid; grid-template-columns: 1.2fr 1fr; gap: 6mm; align-items: stretch; }
+    @media screen and (max-width: 230mm) { .next { grid-template-columns: 1fr; } }
+    .steps { margin: 0; padding: 0; list-style: none; counter-reset: s; display: grid; gap: 2.2mm; font-size: 8.8pt; }
+    .steps li { counter-increment: s; display: grid; grid-template-columns: 7mm 1fr; gap: 3mm; align-items: start; }
+    .steps li::before { content: counter(s); width: 7mm; height: 7mm; border-radius: 50%; display: grid; place-items: center; background: var(--zar); color: var(--wegiel); font-weight: 800; font-size: 9pt; }
+    .steps b { display: block; }
+    .contact { display: grid; grid-template-columns: 1fr auto; gap: 4mm; align-items: center; }
+    .contact__who { display: grid; gap: 1mm; }
+    .contact__name { font-size: 12pt; font-weight: 800; letter-spacing: -0.02em; }
+    .contact__tel { font-size: 16pt; font-weight: 800; letter-spacing: -0.03em; color: var(--link); text-decoration: none; }
+    .qr { width: 24mm; height: 24mm; padding: 2mm; border-radius: 3mm; background: #fff; border: 1px solid #DDD5CC; }
+    .qr svg { width: 100%; height: 100%; display: block; }
+    .qr__hint { grid-column: 1 / -1; margin: 0; font-size: 8pt; color: #5E5650; }
+    .contact__more { grid-column: 1 / -1; margin: 0; font-size: 8.3pt; color: #5E5650; line-height: 1.55; }
+
+    .foot { margin-top: auto; padding-top: 3mm; border-top: 1px solid #DDD5CC; display: flex; justify-content: space-between; gap: 6mm; font-size: 7.5pt; color: #8A817A; }
+    .foot p { margin: 0; max-width: 140mm; }
+    .foot b { color: var(--link); font-weight: 600; white-space: nowrap; }
+
+    @page { size: A4; margin: 0; }
+    @media print {
+      body { background: #fff; }
+      .bar { display: none; }
+      .sheet { margin: 0; box-shadow: none; width: 210mm; height: 297mm; min-height: 0; overflow: hidden; }
+      .card, .next, .bars li { break-inside: avoid; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bar">
+    <button class="btn btn--primary" type="button" data-print>
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></svg>
+      <span data-t="save">Zapisz jako PDF</span>
+    </button>
+    <p data-t="hint">W oknie drukowania wybierz „Zapisz jako PDF” jako drukarkę.</p>
+    <a class="btn btn--ghost" href="index.html#kalkulator" data-t="back">Wróć do kalkulatora</a>
+  </div>
+
+  <main class="sheet" aria-label="Raport">
+    <header class="head">
+      <div class="logo">
+        <svg viewBox="0 0 100 130" aria-hidden="true">
+          <defs>
+            <linearGradient id="gMain" x1="0.2" y1="0" x2="0.6" y2="1"><stop offset="0" stop-color="#C9361A"/><stop offset=".5" stop-color="#E2602A"/><stop offset="1" stop-color="#F29A4A"/></linearGradient>
+            <linearGradient id="gDeep" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4A2A1C"/><stop offset=".6" stop-color="#8C2E1C"/><stop offset="1" stop-color="#B8401F"/></linearGradient>
+            <linearGradient id="gMid" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9E3320"/><stop offset="1" stop-color="#D9542A"/></linearGradient>
+            <linearGradient id="gPale" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F7C98B"/><stop offset="1" stop-color="#F2A65A"/></linearGradient>
+          </defs>
+          <path d="M34 50 C16 62 8 84 14 102 C20 118 36 127 48 127 C42 112 42 98 49 88 C42 78 32 66 34 50 Z" fill="url(#gDeep)"/>
+          <path d="M22 74 C14 88 16 106 28 118 C36 125 44 127 48 127 C40 116 38 104 42 94 C34 90 26 84 22 74 Z" fill="url(#gMid)" opacity=".9"/>
+          <path d="M66 2 C44 24 36 46 46 62 C54 76 64 84 58 104 C56 112 52 120 48 127 C76 122 94 102 92 78 C90 56 70 42 66 2 Z" fill="url(#gMain)"/>
+          <path d="M92 76 C96 104 78 126 50 128 C42 128 34 126 28 122 C56 122 80 106 92 76 Z" fill="url(#gPale)" opacity=".9"/>
+          <path d="M72 58 C64 72 66 88 70 100 C80 90 82 72 72 58 Z" fill="#F7C98B" opacity=".55"/>
+        </svg>
+        <b>kominki<br />śrem</b>
+      </div>
+      <div class="head__meta">
+        <p class="label" data-t="kicker">Wstępny dobór</p>
+        <h1 data-t="title">Twój kominek — moc i koszt ciepła</h1>
+        <p><span data-t="no">Nr</span> <span class="tabular" data-v="no"></span> · <span data-v="date"></span></p>
+      </div>
+    </header>
+    <div class="flame" aria-hidden="true"></div>
+
+    <section class="grid2">
+      <div class="card">
+        <h2 data-t="house">Twój dom</h2>
+        <dl>
+          <dt data-t="area">Powierzchnia do ogrzania</dt><dd class="tabular" data-v="area"></dd>
+          <dt data-t="height">Wysokość sufitu</dt><dd class="tabular" data-v="height"></dd>
+          <dt data-t="vol">Kubatura</dt><dd class="tabular" data-v="vol"></dd>
+          <dt data-t="ins">Ocieplenie</dt><dd data-v="ins"></dd>
+          <dt data-t="ind">Przyjęty wskaźnik</dt><dd class="tabular" data-v="ind"></dd>
+        </dl>
+      </div>
+      <div class="card card--dark">
+        <p class="label" data-t="need">Zalecana moc nominalna wkładu</p>
+        <p class="kw"><span class="kw__num tabular" data-v="kw"></span><span class="kw__unit">kW</span></p>
+        <p class="range"><span data-t="range">Zapotrzebowanie</span> <b class="tabular" data-v="range"></b></p>
+        <div class="scale" aria-hidden="true">
+          <span class="scale__band"></span><span class="scale__mark"></span>
+          <span class="scale__ticks"><i>0</i><i>5</i><i>10</i><i>15</i><i>20</i><i>25 kW</i></span>
+        </div>
+        <p class="tip" data-v="tip"></p>
+      </div>
+    </section>
+
+    <section class="card" data-costs>
+      <div class="grid2">
+        <div>
+          <h2 data-t="costT">Koszt ciepła w sezonie</h2>
+          <p class="label" data-v="saveLabel"></p>
+          <p class="save"><span class="save__num tabular" data-v="save"></span><span class="save__unit" data-t="zl">zł</span></p>
+          <p class="muted" data-v="saveSub"></p>
+          <ul class="facts">
+            <li data-v="share"></li>
+            <li data-v="wood"></li>
+            <li data-v="prices"></li>
+          </ul>
+        </div>
+        <ul class="bars" data-v="bars"></ul>
+      </div>
+    </section>
+
+    <section class="next">
+      <div class="card">
+        <h2 data-t="nextT">Co dalej?</h2>
+        <ol class="steps">
+          <li><span><b data-t="s1">Zadzwoń lub przyjedź do salonu</b><span data-t="s1p">Pokażemy wkłady i okładziny na żywo — w Psarskiem k. Śremu.</span></span></li>
+          <li><span><b data-t="s2">Weź rzut domu lub zdjęcia salonu</b><span data-t="s2p">Sprawdzimy komin, miejsce na kominek i rozprowadzenie ciepła.</span></span></li>
+          <li><span><b data-t="s3">Otrzymasz projekt i wycenę</b><span data-t="s3p">Dobierzemy wkład dokładnie do Twojego domu — bez przewymiarowania.</span></span></li>
+        </ol>
+      </div>
+      <div class="card contact">
+        <div class="contact__who">
+          <p class="label" data-t="call">Zadzwoń</p>
+          <span class="contact__name">Roman Rączkiewicz</span>
+          <a class="contact__tel tabular" href="tel:+48693836137">693 836 137</a>
+        </div>
+        <div class="qr" data-qr aria-hidden="true"></div>
+        <p class="qr__hint" data-t="qr">Zeskanuj telefonem, aby od razu zadzwonić.</p>
+        <p class="contact__more">Przemysław Woroch · <span class="tabular">695 516 353</span><br />biuro@kominkisrem.pl · kominkisrem.pl<br />ul. Lipowa 2, Psarskie, 63-100 Śrem</p>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <p data-t="disc">Wynik ma charakter orientacyjny (metoda wskaźnikowa) i nie zastępuje bilansu cieplnego budynku ani oferty handlowej. Koszty liczone bez opłat stałych; ceny energii i drewna zmieniają się — przy wycenie przeliczymy je na aktualnych stawkach.</p>
+      <b>kominkisrem.pl</b>
+    </footer>
+  </main>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/calc-model.js"></script>
+  <script src="js/raport.js"></script>
+</body>
+</html>

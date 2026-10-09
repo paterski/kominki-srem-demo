@@ -103,6 +103,10 @@
       <symbol id="i-users" viewBox="0 0 24 24"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></symbol>
       <symbol id="i-shield" viewBox="0 0 24 24"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></symbol>
       <symbol id="i-home" viewBox="0 0 24 24"><path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/><path d="M3 10a2 2 0 0 1 .71-1.53l7-6a2 2 0 0 1 2.58 0l7 6A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></symbol>
+      <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 15V3"/><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><path d="m7 10 5 5 5-5"/></symbol>
+      <symbol id="i-coins" viewBox="0 0 24 24"><circle cx="8" cy="8" r="6"/><path d="M18.09 10.37A6 6 0 1 1 10.34 18"/><path d="M7 6h1v4"/><path d="m16.71 13.88.7.71-2.82 2.82"/></symbol>
+      <symbol id="i-sliders" viewBox="0 0 24 24"><path d="M21 4h-7M10 4H3M21 12h-9M8 12H3M21 20h-5M12 20H3M14 2v4M8 10v4M16 18v4"/></symbol>
+      <symbol id="i-printer" viewBox="0 0 24 24"><path d="M6 9V3h12v6"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8" rx="1"/></symbol>
       <symbol id="i-x" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
       <symbol id="i-facebook" viewBox="0 0 24 24"><path d="M9.101 23.691v-7.98H6.627v-3.667h2.474v-1.58c0-4.085 1.848-5.978 5.858-5.978.401 0 .955.042 1.468.103a8.68 8.68 0 0 1 1.141.195v3.325a8.623 8.623 0 0 0-.653-.036 26.805 26.805 0 0 0-.733-.009c-.707 0-1.259.096-1.675.309a1.686 1.686 0 0 0-.679.622c-.258.42-.374.995-.374 1.752v1.297h3.919l-.386 2.103-.287 1.564h-3.246v8.245C19.396 23.238 24 18.179 24 12.044c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.628 3.874 10.35 9.101 11.647Z"/></symbol>
     </defs>
@@ -459,13 +463,70 @@
                 <span class="scale__ticks"><i>0</i><i>5</i><i>10</i><i>15</i><i>20</i><i>25 kW</i></span>
               </div>
               <p class="result__tip" data-out="tip"></p>
-              <a class="btn btn--primary btn--block" href="#kontakt" data-calc-cta>
-                <span data-i18n="calc.cta">Dobierzmy wkład razem</span>
-                <svg class="ico" aria-hidden="true"><use href="#i-arrow-r"/></svg>
-              </a>
+              <div class="result__actions">
+                <a class="btn btn--primary btn--block" href="#kontakt" data-calc-cta>
+                  <span data-i18n="calc.cta">Dobierzmy wkład razem</span>
+                  <svg class="ico" aria-hidden="true"><use href="#i-arrow-r"/></svg>
+                </a>
+                <a class="btn btn--glass glass btn--block" href="raport.html" target="_blank" rel="noopener" data-calc-pdf>
+                  <svg class="ico" aria-hidden="true"><use href="#i-download"/></svg>
+                  <span data-i18n="calc.pdf">Pobierz wynik w PDF</span>
+                </a>
+              </div>
             </div>
           </div>
         </div>
+        <!-- Season heating cost (js/calc.js + js/calc-model.js) -->
+        <div class="costs glass" data-reveal>
+          <div class="costs__head">
+            <p class="label"><svg class="ico" aria-hidden="true"><use href="#i-coins"/></svg><span data-i18n="cost.eyebrow">Koszt ogrzewania</span></p>
+            <h3 class="h3" data-i18n="cost.t">Ile zaoszczędzisz, paląc w kominku?</h3>
+            <p class="hint" data-i18n="cost.lead">Liczymy dla tej samej powierzchni, wysokości i ocieplenia co powyżej — porównujemy koszt ciepła z drewna z tym, czym ogrzewasz dom dziś.</p>
+          </div>
+          <div class="costs__grid">
+            <form class="costs__form" novalidate onsubmit="return false">
+              <fieldset class="costs__set">
+                <legend data-i18n="cost.cur">Czym ogrzewasz dom teraz?</legend>
+                <div class="chips">
+                  <label class="chipr"><input type="radio" name="cur" value="gas" checked /><span data-i18n="cost.gas">Gaz</span></label>
+                  <label class="chipr"><input type="radio" name="cur" value="pump" /><span data-i18n="cost.pump">Pompa ciepła</span></label>
+                  <label class="chipr"><input type="radio" name="cur" value="electric" /><span data-i18n="cost.electric">Prąd (grzejniki)</span></label>
+                </div>
+              </fieldset>
+              <fieldset class="costs__set">
+                <legend data-i18n="cost.share">Jak często będziesz palić?</legend>
+                <div class="share">
+                  <label class="share__opt"><input type="radio" name="share" value="evenings" /><span><b data-i18n="cost.s1">Wieczorami</b><small data-i18n="cost.s1p">ok. ¼ ciepła w sezonie</small></span></label>
+                  <label class="share__opt"><input type="radio" name="share" value="daily" checked /><span><b data-i18n="cost.s2">Codziennie</b><small data-i18n="cost.s2p">ok. ½ ciepła</small></span></label>
+                  <label class="share__opt"><input type="radio" name="share" value="main" /><span><b data-i18n="cost.s3">Główne ogrzewanie</b><small data-i18n="cost.s3p">ok. 80% ciepła, np. płaszcz wodny</small></span></label>
+                </div>
+              </fieldset>
+              <details class="costs__prices">
+                <summary><svg class="ico" aria-hidden="true"><use href="#i-sliders"/></svg><span data-i18n="cost.prices">Ceny przyjęte do obliczeń</span></summary>
+                <div class="costs__price-grid">
+                  <label class="field"><span data-i18n="cost.pWood">Drewno (zł za mp)</span><input type="number" name="pw" inputmode="decimal" min="50" max="1500" step="10" value="400" /></label>
+                  <label class="field"><span data-i18n="cost.pGas">Gaz (zł za kWh)</span><input type="number" name="pg" inputmode="decimal" min="0.05" max="2" step="0.01" value="0.31" /></label>
+                  <label class="field"><span data-i18n="cost.pPower">Prąd (zł za kWh)</span><input type="number" name="pe" inputmode="decimal" min="0.2" max="3" step="0.01" value="1.13" /></label>
+                </div>
+                <p class="hint" data-i18n="cost.pricesHint">Wpisz ceny z własnej faktury lub składu drewna. Domyślne: sezonowany buk/dąb 400 zł/mp, gaz z dystrybucją 0,31 zł/kWh, prąd G11 z dystrybucją 1,13 zł/kWh (2026). Bez opłat stałych.</p>
+              </details>
+            </form>
+
+            <div class="costs__out" aria-live="polite">
+              <p class="label" data-out="saveLabel">Oszczędzasz w sezonie ok.</p>
+              <p class="costs__save"><span class="costs__num tabular" data-out="save">0</span><span class="costs__unit">zł</span></p>
+              <p class="costs__sub" data-out="saveSub"></p>
+              <ul class="bars">
+                <li class="bar bar--wood" data-k="wood"><span class="bar__name" data-i18n="cost.bWood">Drewno w kominku</span><span class="bar__track"><span class="bar__fill"></span></span><span class="bar__val tabular"></span></li>
+                <li class="bar" data-k="gas"><span class="bar__name" data-i18n="cost.bGas">Gaz ziemny</span><span class="bar__track"><span class="bar__fill"></span></span><span class="bar__val tabular"></span></li>
+                <li class="bar" data-k="pump"><span class="bar__name" data-i18n="cost.bPump">Pompa ciepła</span><span class="bar__track"><span class="bar__fill"></span></span><span class="bar__val tabular"></span></li>
+                <li class="bar" data-k="electric"><span class="bar__name" data-i18n="cost.bElectric">Grzejniki elektryczne</span><span class="bar__track"><span class="bar__fill"></span></span><span class="bar__val tabular"></span></li>
+              </ul>
+              <p class="costs__wood"><svg class="ico" aria-hidden="true"><use href="#i-leaf"/></svg><span data-out="wood"></span></p>
+            </div>
+          </div>
+        </div>
+
         <p class="calc__note" data-reveal>
           <span data-i18n="calc.note">Wynik jest szacunkiem (metoda wskaźnikowa W/m³) i nie zastępuje bilansu cieplnego budynku. Przyjęte wskaźniki: 20–30 / 30–40 / 40–55 / 60–80 W/m³ — na podstawie poradników branżowych.</span>
           <a href="porady/jak-dobrac-moc-kominka.html" data-i18n="calc.noteLink">Jak to liczymy?</a>
@@ -782,6 +843,7 @@
   <script src="js/sparks.js" defer></script>
   <script src="js/fire-sound.js" defer></script>
   <script src="js/weather.js" defer></script>
+  <script src="js/calc-model.js" defer></script>
   <script src="js/calc.js" defer></script>
   <script src="js/palette.js" defer></script>
   <script src="js/analytics.js" defer></script>

@@ -21,7 +21,7 @@
   const lang = () => (window.KS ? window.KS.lang : 'pl');
   const nf = (v, d = 1) => new Intl.NumberFormat(lang() === 'pl' ? 'pl-PL' : 'en-GB', { minimumFractionDigits: d, maximumFractionDigits: d }).format(v);
 
-  const LEVELS = { a: [20, 30], b: [30, 40], c: [40, 55], d: [60, 80] };
+  const M = window.KSCalc; // shared model (js/calc-model.js)
   const LOOK = {          // wall stroke, colour, heat-leak count
     a: [15, '#F7C98B', 0],
     b: [11, '#F29A4A', 1],
@@ -109,11 +109,7 @@
     const a = +area.value;
     const h = +height.value;
     const ins = (form.querySelector('input[name="ins"]:checked') || {}).value || 'b';
-    const [lo, hi] = LEVELS[ins];
-    const vol = a * h;
-    const min = (vol * lo) / 1000;
-    const max = (vol * hi) / 1000;
-    const kw = Math.max(2, Math.round(((min + max) / 2) * 2) / 2);
+    const { vol, min, max, kw } = M.power(a, h, ins);
     current = { a, h, ins, kw };
 
     fill(area); fill(height);
@@ -131,7 +127,71 @@
     const tip = kw < 5 ? 'tip.small' : kw <= 12 ? 'tip.mid' : kw <= 18 ? 'tip.big' : 'tip.huge';
     $o('tip').textContent = t(tip);
     drawHouse(a, h, ins, kw);
+    updateCosts();
   }
+
+  /* ------------------------------------------------------------------------
+     Season heating cost — wood in the fireplace vs. the current heating
+     ------------------------------------------------------------------------ */
+  const costForm = document.querySelector('.costs__form');
+  const bars = Array.from(document.querySelectorAll('.costs .bar'));
+  const saveEl = $o('save');
+  let saveShown = 0;
+  const zl = (v) => new Intl.NumberFormat(lang() === 'pl' ? 'pl-PL' : 'en-GB', { maximumFractionDigits: 0 }).format(Math.round(v / 10) * 10);
+  const num = (input, fallback) => { const v = parseFloat(String(input.value).replace(',', '.')); return Number.isFinite(v) && v > 0 ? v : fallback; };
+
+  function costState() {
+    if (!costForm || !current) return null;
+    const cur = (costForm.querySelector('input[name="cur"]:checked') || {}).value || 'gas';
+    const share = (costForm.querySelector('input[name="share"]:checked') || {}).value || 'daily';
+    const d = M.DEFAULT_PRICES;
+    const prices = { wood: num(costForm.elements.pw, d.wood), gas: num(costForm.elements.pg, d.gas), power: num(costForm.elements.pe, d.power) };
+    return { cur, share, prices, r: M.season(current.a, current.h, current.ins, share, prices) };
+  }
+
+  function animateSave(to) {
+    const gsap = window.gsap;
+    if (!gsap || matchMedia('(prefers-reduced-motion: reduce)').matches) { saveShown = to; saveEl.textContent = zl(to); return; }
+    const o = { v: saveShown };
+    gsap.to(o, { v: to, duration: 0.8, ease: 'power3.out', overwrite: true, onUpdate: () => { saveShown = o.v; saveEl.textContent = zl(o.v); } });
+  }
+
+  function updateCosts() {
+    const st = costState();
+    if (!st) return;
+    const { cur, r } = st;
+    const save = r.cost[cur] - r.cost.wood;
+    const pct = Math.round((save / r.cost[cur]) * 100);
+    const meaningful = pct >= 5;
+    $o('saveLabel').textContent = t(meaningful ? 'cost.saveLabel' : 'cost.evenLabel');
+    animateSave(Math.max(0, save));
+    $o('saveSub').textContent = meaningful ? window.KS.fmt(`cost.vs.${cur}`, { pct }) : t('cost.even');
+    const max = Math.max(...Object.values(r.cost));
+    bars.forEach((b) => {
+      const k = b.dataset.k;
+      b.classList.toggle('is-current', k === cur);
+      b.querySelector('.bar__name').dataset.now = t('cost.now');
+      b.querySelector('.bar__fill').style.transform = `scaleX(${(r.cost[k] / max).toFixed(4)})`;
+      b.querySelector('.bar__val').textContent = `${zl(r.cost[k])} ${t('cost.perSeason')}`;
+    });
+    $o('wood').textContent = window.KS.fmt('cost.wood', { mp: nf(r.woodMp), t: nf(r.woodKg / 1000), kwh: zl(r.fromFire) });
+    updatePdfLink(st);
+  }
+
+  /* "Pobierz wynik w PDF" — the printable report gets every input in its URL */
+  const pdf = document.querySelector('[data-calc-pdf]');
+  function updatePdfLink(st) {
+    if (!pdf || !current) return;
+    const q = new URLSearchParams({
+      a: current.a, h: current.h, i: current.ins,
+      cur: st.cur, s: st.share, pw: st.prices.wood, pg: st.prices.gas, pe: st.prices.power,
+      lang: lang(),
+    });
+    pdf.href = `raport.html?${q}`;
+  }
+  pdf && pdf.addEventListener('click', () => document.dispatchEvent(new CustomEvent('ks:calc-pdf', { detail: { kw: current && current.kw } })));
+  costForm && costForm.addEventListener('input', updateCosts);
+  costForm && costForm.addEventListener('change', updateCosts);
 
   /* Flame tongues inside the glass, each flickering on its own rhythm. */
   const BASE = -15.5;
